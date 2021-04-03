@@ -34,9 +34,9 @@ class Piece {
                 [0, 0, 0, 0]
             ],
             [
-                [0, 0, 0, 0]
-                [0, 6, 0, 0]
-                [6, 6, 6, 0]
+                [0, 0, 0, 0],
+                [0, 6, 0, 0],
+                [6, 6, 6, 0],
                 [0, 0, 0, 0]
             ],
             [
@@ -47,14 +47,22 @@ class Piece {
             ]
         ];
 
-        if (pieceId < 0 || pieceId > pieces.length - 1) {
+        const invalidPieceId = (pieceId < 0 || pieceId > pieces.length - 1);
+        if (invalidPieceId) {
             return;
         }
-        this.piece = piece[pieceId];
+
+        this.matrix = pieces[pieceId - 1];
+        this.pieceHeight = this.matrix.length;
+        this.pieceWidth =  this.matrix[0].length;
     }
 
-    draw(){
-
+    put(Board, x, y){
+        for (let py = 0; py < this.pieceWidth; py++) {
+            for (let px = 0; px < this.pieceWidth; px++) {
+                Board.setState(x + px, y + py, this.matrix[py][px])
+            }
+        }
     }
 }
 
@@ -62,31 +70,64 @@ class Board {
     constructor(rows, columns) {
         this.rows = rows;
         this.columns = columns;
+        this.buildMatrix();
+    }
+
+    buildMatrix() {
         this.matrix = [];
-        for (let i = 0; i < rows; i++) {
-            this.matrix[i] = [];
-            for (let j = 0; j < columns; j++) {
-                this.matrix[i][j] = 0;
+        for (let x = 0; x < this.rows; x++) {
+            this.matrix[x] = [];
+            for (let y = 0; y < this.columns; y++) {
+                this.matrix[x][y] = 0;
             }
         }
     }
 
+    isValidCoordinates(x, y) {
+        return (
+            x >= 0 &&
+            x < this.columns &&
+            y >= 0 &&
+            y < this.rows
+        );
+    }
+
+    setState(x, y, state) {
+        if (!this.isValidCoordinates(x, y)) {
+            return;
+        }
+        this.matrix[y][x] = state;
+    }
+
+    getState(coordX, coordY) {
+        if (!this.isValidCoordinates(coordX, coordY)) {
+            return;
+        }
+        return this.matrix[coordY][coordX];
+    }
+
+
+    drawCell(x, y, cellWidth, cellHeight) {
+        context.fillStyle = '#0000FF';
+        context.fillRect(y * cellWidth + 2, x * cellHeight + 2, cellWidth - 2, cellHeight - 2);
+
+        context.fillStyle = '#0000AA';
+        context.fillRect(y * cellWidth + 2, x * cellHeight + cellHeight - 2, cellWidth - 2, 2);
+        context.fillRect(y * cellWidth + cellWidth - 2, x * cellHeight + 2, 2, cellHeight - 2);
+
+        context.fillStyle = '#0044FF';
+        context.fillRect(y * cellWidth + 2, x * cellHeight + 2, cellWidth - 2, 2);
+        context.fillRect(y * cellWidth + 2, x * cellHeight + 2, 2, cellHeight - 2);
+}
+
     draw(context) {
         let cellWidth = (context.canvas.width / this.columns) >> 0;
         let cellHeight = (context.canvas.height / this.rows) >> 0;
-        for (let row = 0; row < this.rows; row++) {
-            for (let column = 0; column < this.columns; column++) {
-                if (this.matrix[row][column] != 0) {
-                    context.fillStyle = '#0000FF';
-                    context.fillRect(column * cellWidth + 2, row * cellHeight + 2, cellWidth - 2, cellHeight - 2);
 
-                    context.fillStyle = '#0000AA';
-                    context.fillRect(column * cellWidth + 2, row * cellHeight + cellHeight - 2, cellWidth - 2, 2);
-                    context.fillRect(column * cellWidth + cellWidth - 2, row * cellHeight + 2, 2, cellHeight - 2);
-
-                    context.fillStyle = '#0044FF';
-                    context.fillRect(column * cellWidth + 2, row * cellHeight + 2, cellWidth - 2, 2);
-                    context.fillRect(column * cellWidth + 2, row * cellHeight + 2, 2, cellHeight - 2);
+        for (let y = 0; y < this.columns; y++) {
+            for (let x = 0; x < this.rows; x++) {
+                if (this.getState(y, x) != 0) {
+                    this.drawCell(x, y, cellWidth, cellHeight);
                 }
             }
         }
@@ -124,8 +165,7 @@ board.matrix = [
 let canvas;
 let context;
 
-let rectX = 0;
-let rectY = 0;
+let currentPiece = new Piece(1);
 
 window.onload = init;
 
@@ -140,6 +180,7 @@ function init(){
 }
 
 function draw() {
+    currentPiece.put(board, 0, 0);
     board.draw(context);
 }
 
