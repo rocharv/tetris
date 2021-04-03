@@ -107,27 +107,73 @@ class Board {
     }
 
 
-    drawCell(x, y, cellWidth, cellHeight) {
-        context.fillStyle = '#0000FF';
-        context.fillRect(y * cellWidth + 2, x * cellHeight + 2, cellWidth - 2, cellHeight - 2);
+    drawCell(boardX, boardY, cellWidth, cellHeight, cellState) {
 
-        context.fillStyle = '#0000AA';
-        context.fillRect(y * cellWidth + 2, x * cellHeight + cellHeight - 2, cellWidth - 2, 2);
-        context.fillRect(y * cellWidth + cellWidth - 2, x * cellHeight + 2, 2, cellHeight - 2);
+        const colorState = {
+            1: {
+                main: '#00bfbf',
+                shaded: '#007f7f',
+                illuminated: '#00ffff'
+            },
+            2: {
+                main: '#0000bf',
+                shaded: '#00007f',
+                illuminated: '#0000ff'
+            },
+            3: {
+                main: '#bf7f00',
+                shaded: '#7f3f00',
+                illuminated: '#ffbf00'
+            },
+            4: {
+                main: '#00bf00',
+                shaded: '#007f00',
+                illuminated: '#00ff00'
+            },
+            5: {
+                main: '#bf0000',
+                shaded: '#7f0000',
+                illuminated: '#ff0000'
+            },
+            6: {
+                main: '#bf00bf',
+                shaded: '#7f007f',
+                illuminated: '#ff00ff'
+            },
+            7: {
+                main: '#bfbf00',
+                shaded: '#7f7f00',
+                illuminated: '#ffff00'
+            }
+        };
 
-        context.fillStyle = '#0044FF';
-        context.fillRect(y * cellWidth + 2, x * cellHeight + 2, cellWidth - 2, 2);
-        context.fillRect(y * cellWidth + 2, x * cellHeight + 2, 2, cellHeight - 2);
+        let mainColor = colorState[cellState].main;
+        let shadedColor = colorState[cellState].shaded;
+        let illuminatedColor = colorState[cellState].illuminated;
+
+        context.fillStyle = mainColor;
+        context.fillRect(boardY * cellWidth + 2, boardX * cellHeight + 2, cellWidth - 2, cellHeight - 2);
+
+        context.fillStyle = shadedColor;
+        context.fillRect(boardY * cellWidth + 2, boardX * cellHeight + cellHeight - 2, cellWidth - 2, 2);
+        context.fillRect(boardY * cellWidth + cellWidth - 2, boardX * cellHeight + 2, 2, cellHeight - 2);
+
+        context.fillStyle = illuminatedColor;
+        context.fillRect(boardY * cellWidth + 2, boardX * cellHeight + 2, cellWidth - 2, 2);
+        context.fillRect(boardY * cellWidth + 2, boardX * cellHeight + 2, 2, cellHeight - 2);
 }
 
     draw(context) {
         let cellWidth = (context.canvas.width / this.columns) >> 0;
         let cellHeight = (context.canvas.height / this.rows) >> 0;
+        let cellState;
 
         for (let y = 0; y < this.columns; y++) {
             for (let x = 0; x < this.rows; x++) {
-                if (this.getState(y, x) != 0) {
-                    this.drawCell(x, y, cellWidth, cellHeight);
+                cellState = this.getState(y, x);
+                if (cellState != 0) {
+
+                    this.drawCell(x, y, cellWidth, cellHeight, cellState);
                 }
             }
         }
@@ -141,31 +187,27 @@ board.matrix = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
-
     [0, 0, 0, 0, 1, 0, 0, 0, 0 ,0],
     [0, 0, 0, 0, 1, 0, 0, 0, 0 ,0],
     [0, 0, 0, 0, 1, 0, 0, 0, 0 ,0],
     [0, 0, 0, 0, 1, 0, 0, 0, 0 ,0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
-
-    [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
-    [1, 1, 1, 1, 0, 1, 1, 1, 1 ,1],
-    [1, 1, 1, 1, 0, 1, 1, 1, 1 ,1],
-    [1, 1, 1, 1, 0, 1, 1, 1, 1 ,1],
-    [1, 1, 1, 1, 0, 1, 1, 1, 1 ,1],
-
-    [1, 1, 1, 1, 0, 1, 1, 1, 1 ,1],
-    [1, 1, 1, 1, 0, 1, 1, 1, 1 ,1],
-    [1, 1, 1, 1, 0, 1, 1, 1, 1 ,1],
-    [1, 1, 1, 1, 0, 1, 1, 1, 1 ,1],
-    [1, 1, 1, 1, 0, 1, 1, 1, 1 ,1]
-
+    [0, 0, 3, 3, 0, 0, 0, 0, 0 ,0],
+    [2, 2, 2, 3, 0, 3, 3, 3, 3 ,3],
+    [3, 0, 2, 3, 0, 3, 0, 0, 6 ,3],
+    [3, 6, 6, 6, 0, 2, 2, 6, 6 ,3],
+    [3, 3, 6, 0, 0, 2, 5, 5, 6 ,0],
+    [2, 2, 0, 0, 0, 2, 5, 5, 5 ,1],
+    [2, 7, 7, 1, 0, 5, 5, 4, 4 ,1],
+    [2, 7, 7, 1, 0, 5, 4, 4, 0 ,1],
+    [7, 7, 0, 1, 0, 0, 6, 5, 5 ,1],
+    [7, 7, 0, 1, 0, 6, 6, 6, 5 ,5]
 ];
 
 let canvas;
 let context;
 
-let currentPiece = new Piece(1);
+let currentPiece = new Piece(2);
 
 window.onload = init;
 
