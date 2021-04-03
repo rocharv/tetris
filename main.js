@@ -1,5 +1,18 @@
 'use strict';
 
+class Matrix {
+    constructor(rows, columns) {
+        let matrix = [];
+        for (let x = 0; x < rows; x++) {
+            matrix[x] = [];
+            for (let y = 0; y < columns; y++) {
+                matrix[x][y] = 0;
+            }
+        }
+        return matrix;
+    }
+}
+
 class Piece {
     constructor(pieceId) {
         this.pieceId = pieceId;
@@ -57,16 +70,10 @@ class Piece {
         this.matrix = pieces[this.pieceId - 1];
         this.pieceHeight = this.matrix.length;
         this.pieceWidth =  this.matrix[0].length;
-        console.log(this.matrix);
     }
 
     rotate(isClockWise) {
-        let temp = [
-            [0, 0, 0, 0],
-            [0, 0, 0, 0],
-            [0, 0, 0, 0],
-            [0, 0, 0, 0]
-        ];
+        let temp = new Matrix(this.pieceHeight, this.pieceWidth);
 
         const oPiece = this.pieceId == 7;
         if (oPiece) {
@@ -98,17 +105,7 @@ class Board {
     constructor(rows, columns) {
         this.rows = rows;
         this.columns = columns;
-        this.buildMatrix();
-    }
-
-    buildMatrix() {
-        this.matrix = [];
-        for (let x = 0; x < this.rows; x++) {
-            this.matrix[x] = [];
-            for (let y = 0; y < this.columns; y++) {
-                this.matrix[x][y] = 0;
-            }
-        }
+        this.matrix = new Matrix(rows, columns);
     }
 
     isValidCoordinates(x, y) {
@@ -127,11 +124,11 @@ class Board {
         this.matrix[y][x] = state;
     }
 
-    getState(coordX, coordY) {
-        if (!this.isValidCoordinates(coordX, coordY)) {
+    getState(x, y) {
+        if (!this.isValidCoordinates(x, y)) {
             return;
         }
-        return this.matrix[coordY][coordX];
+        return this.matrix[y][x];
     }
 
     drawCell(boardX, boardY, cellWidth, cellHeight, cellState) {
@@ -234,7 +231,6 @@ let context;
 
 let currentPiece = new Piece(1);
 currentPiece.rotate(true);
-
 
 window.onload = init;
 
