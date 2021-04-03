@@ -2,6 +2,8 @@
 
 class Piece {
     constructor(pieceId) {
+        this.pieceId = pieceId;
+
         const pieces = [
             [
                 [0, 1, 0, 0],
@@ -47,14 +49,37 @@ class Piece {
             ]
         ];
 
-        const invalidPieceId = (pieceId < 0 || pieceId > pieces.length - 1);
+        const invalidPieceId = (this.pieceId < 1 || this.pieceId > pieces.length);
         if (invalidPieceId) {
             return;
         }
 
-        this.matrix = pieces[pieceId - 1];
+        this.matrix = pieces[this.pieceId - 1];
         this.pieceHeight = this.matrix.length;
         this.pieceWidth =  this.matrix[0].length;
+        console.log(this.matrix);
+    }
+
+    rotate(isClockWise) {
+        const oPiece = this.pieceId == 7;
+        if (oPiece) {
+            return
+        }
+
+        let temp;
+        for (let py = 0; py < this.pieceHeight; py++) {
+            for (let px = 0; px < this.pieceWidth; px++) {
+                if (isClockWise) {
+                    temp = this.matrix[px][3 - py];
+                    this.matrix[px][3 - py] = this.matrix[py][px];
+                    this.matrix[py][px] = temp;
+                } else {
+                    temp = this.matrix[3 - px][py];
+                    this.matrix[3 - px][py] = this.matrix[py][px];
+                    this.matrix[py][px] = temp;
+                }
+            }
+        }
     }
 
     put(Board, x, y){
@@ -106,9 +131,7 @@ class Board {
         return this.matrix[coordY][coordX];
     }
 
-
     drawCell(boardX, boardY, cellWidth, cellHeight, cellState) {
-
         const colorState = {
             1: {
                 main: '#00bfbf',
@@ -172,7 +195,6 @@ class Board {
             for (let x = 0; x < this.rows; x++) {
                 cellState = this.getState(y, x);
                 if (cellState != 0) {
-
                     this.drawCell(x, y, cellWidth, cellHeight, cellState);
                 }
             }
@@ -207,7 +229,8 @@ board.matrix = [
 let canvas;
 let context;
 
-let currentPiece = new Piece(2);
+let currentPiece = new Piece(6);
+//currentPiece.rotate(false);
 
 window.onload = init;
 
@@ -222,7 +245,6 @@ function init(){
 }
 
 function draw() {
-    currentPiece.put(board, 0, 0);
     board.draw(context);
 }
 
@@ -230,6 +252,7 @@ function update() {
 }
 
 function gameLoop(timeStamp) {
+    currentPiece.put(board, 0, 0);
     draw();
 
     // window.requestAnimationFrame(gameLoop);
