@@ -61,25 +61,28 @@ class Piece {
     }
 
     rotate(isClockWise) {
+        let temp = [
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0]
+        ];
+
         const oPiece = this.pieceId == 7;
         if (oPiece) {
             return
         }
 
-        let temp;
         for (let py = 0; py < this.pieceHeight; py++) {
             for (let px = 0; px < this.pieceWidth; px++) {
                 if (isClockWise) {
-                    temp = this.matrix[px][3 - py];
-                    this.matrix[px][3 - py] = this.matrix[py][px];
-                    this.matrix[py][px] = temp;
+                    temp[py][px] = this.matrix[3-px][py];
                 } else {
-                    temp = this.matrix[3 - px][py];
-                    this.matrix[3 - px][py] = this.matrix[py][px];
-                    this.matrix[py][px] = temp;
+                    temp[py][px] = this.matrix[px][3-py];
                 }
             }
         }
+        this.matrix = temp;
     }
 
     put(Board, x, y){
@@ -229,8 +232,9 @@ board.matrix = [
 let canvas;
 let context;
 
-let currentPiece = new Piece(6);
-//currentPiece.rotate(false);
+let currentPiece = new Piece(1);
+currentPiece.rotate(true);
+
 
 window.onload = init;
 
