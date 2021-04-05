@@ -8,7 +8,6 @@ export class Piece {
         this.pieceId = pieceId;
         this.x = 3;
         this.y = 0;
-        this.matrix = new Matrix(4, 4);
 
         const pieces = [
             [
@@ -60,6 +59,7 @@ export class Piece {
             return;
         }
 
+        this.matrix = new Matrix(pieces[this.pieceId - 1].length, pieces[this.pieceId - 1][0].length);
         this.matrix.setFromArray(pieces[this.pieceId - 1]);
         this.height = this.matrix.rows;
         this.width =  this.matrix.columns;
@@ -70,7 +70,7 @@ export class Piece {
 
         const oPiece = this.pieceId == 7;
         if (oPiece) {
-            return
+            return;
         }
 
         for (let py = 0; py < this.height; py++) {
@@ -92,17 +92,25 @@ export class Piece {
                 }
             }
         }
-        this.matrix.setFromArray(tempMatrix.get());
+
+        this.removeFromBoard(this.x, this.y);
+
+        if (this.isFree(tempMatrix, this.x, this.y)) {
+            this.matrix.setFromArray(tempMatrix.get());
+        }
+
+        this.addToBoard(this.x, this.y);
+
     }
 
-    isFree(x, y) {
+    isFree(pieceMatrix, x, y) {
         let free = true;
         for (let py = 0; py < this.height; py++) {
             if (!free){
                 break;
             }
             for (let px = 0; px < this.width; px++) {
-                if (this.matrix.getValue(px, py) !=0 &&
+                if (pieceMatrix.getValue(px, py) !=0 &&
                     (this.board.matrix.getValue(x+px, y+py) != 0 ||
                     x+px < 0 ||
                     y+py < 0)) {
@@ -117,7 +125,7 @@ export class Piece {
     addToBoard(x, y) {
         this.removeFromBoard(this.x, this.y);
 
-        if (!this.isFree(x, y)) {
+        if (!this.isFree(this.matrix, x, y)) {
             this.addToBoard(this.x, this.y);
             return;
         }
@@ -153,7 +161,7 @@ export class Piece {
     }
 
     move(keyPressed) {
-        const newCoord = {
+        const newMove = {
             'ArrowDown': {
                 'x': this.x,
                 'y': this.y + 1,
@@ -168,7 +176,16 @@ export class Piece {
             }
         }
 
-        this.addToBoard(newCoord[keyPressed].x, newCoord[keyPressed].y);
+        if (keyPressed == 'ArrowUp') {
+            this.rotate(true);
+            return;
+        }
+
+        if (!(keyPressed in newMove)) {
+            return;
+        }
+
+        this.addToBoard(newMove[keyPressed].x, newMove[keyPressed].y);
         this.board.draw();
     }
 }

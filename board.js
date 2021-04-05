@@ -57,15 +57,15 @@ export class Board {
         let illuminatedColor = colorState[cellState].illuminated;
 
         this.context.fillStyle = mainColor;
-        this.context.fillRect(boardY * cellWidth + 2, boardX * cellHeight + 2, cellWidth - 2, cellHeight - 2);
+        this.context.fillRect(boardX * cellWidth + 2, boardY * cellHeight + 2, cellWidth - 2, cellHeight - 2);
 
         this.context.fillStyle = shadedColor;
-        this.context.fillRect(boardY * cellWidth + 2, boardX * cellHeight + cellHeight - 2, cellWidth - 2, 2);
-        this.context.fillRect(boardY * cellWidth + cellWidth - 2, boardX * cellHeight + 2, 2, cellHeight - 2);
+        this.context.fillRect(boardX * cellWidth + 2, boardY * cellHeight + cellHeight - 2, cellWidth - 2, 2);
+        this.context.fillRect(boardX * cellWidth + cellWidth - 2, boardY * cellHeight + 2, 2, cellHeight - 2);
 
         this.context.fillStyle = illuminatedColor;
-        this.context.fillRect(boardY * cellWidth + 2, boardX * cellHeight + 2, cellWidth - 2, 2);
-        this.context.fillRect(boardY * cellWidth + 2, boardX * cellHeight + 2, 2, cellHeight - 2);
+        this.context.fillRect(boardX * cellWidth + 2, boardY * cellHeight + 2, cellWidth - 2, 2);
+        this.context.fillRect(boardX * cellWidth + 2, boardY * cellHeight + 2, 2, cellHeight - 2);
 }
 
     draw() {
@@ -73,9 +73,9 @@ export class Board {
         let cellHeight = (this.context.canvas.height / this.matrix.rows) >> 0;
         let cellState;
 
-        for (let y = 0; y < this.matrix.columns; y++) {
-            for (let x = 0; x < this.matrix.rows; x++) {
-                cellState = this.matrix.getValue(y, x);
+        for (let y = 0; y < this.matrix.rows; y++) {
+            for (let x = 0; x < this.matrix.columns; x++) {
+                cellState = this.matrix.getValue(x, y);
                 this.drawCell(x, y, cellWidth, cellHeight, cellState);
             }
         }
