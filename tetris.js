@@ -48,7 +48,7 @@ function init(){
     document.onkeydown = logKey;
 
     // First piece is taken
-    currentPiece = new Piece(board, 6);
+    currentPiece = new Piece(board, Math.floor(Math.random() * 7) + 1);
 
     // Start the first frame request
     window.requestAnimationFrame(gameLoop);
