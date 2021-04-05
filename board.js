@@ -10,6 +10,11 @@ export class Board {
 
     drawCell(boardX, boardY, cellWidth, cellHeight, cellState) {
         const colorState = {
+            0: {
+                'main': '#111111',
+                'shaded': '#000000',
+                'illuminated': '#222222'
+            },
             1: {
                 'main': '#00bfbf',
                 'shaded': '#007f7f',
@@ -71,9 +76,7 @@ export class Board {
         for (let y = 0; y < this.matrix.columns; y++) {
             for (let x = 0; x < this.matrix.rows; x++) {
                 cellState = this.matrix.getValue(y, x);
-                if (cellState != 0) {
-                    this.drawCell(x, y, cellWidth, cellHeight, cellState);
-                }
+                this.drawCell(x, y, cellWidth, cellHeight, cellState);
             }
         }
     }

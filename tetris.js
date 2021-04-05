@@ -11,7 +11,7 @@ let context;
 window.onload = init;
 
 function logKey(k) {
-    currentPiece.move(board, k.code);
+    currentPiece.move(k.code);
 }
 
 function init(){
@@ -19,7 +19,7 @@ function init(){
     canvas = document.getElementById('canvas');
     context = canvas.getContext('2d');
 
-    // Board initial
+    // Board initial state
     board = new Board(context, 20, 10);
     board.matrix.setFromArray([
         [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
@@ -27,10 +27,10 @@ function init(){
         [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
-        [0, 0, 0, 0, 1, 0, 0, 0, 0 ,0],
-        [0, 0, 0, 0, 1, 0, 0, 0, 0 ,0],
-        [0, 0, 0, 0, 1, 0, 0, 0, 0 ,0],
-        [0, 0, 0, 0, 1, 0, 0, 0, 0 ,0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
         [0, 0, 3, 3, 0, 0, 0, 0, 0 ,0],
         [2, 2, 2, 3, 0, 3, 3, 3, 3 ,3],
@@ -48,7 +48,7 @@ function init(){
     document.onkeydown = logKey;
 
     // First piece is taken
-    currentPiece = new Piece(1);
+    currentPiece = new Piece(board, 1);
 
     // Start the first frame request
     window.requestAnimationFrame(gameLoop);

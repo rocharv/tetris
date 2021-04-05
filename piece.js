@@ -3,7 +3,8 @@
 import { Matrix } from './matrix.js';
 
 export class Piece {
-    constructor(pieceId) {
+    constructor(board, pieceId) {
+        this.board = board;
         this.pieceId = pieceId;
         this.x = 3;
         this.y = 0;
@@ -94,14 +95,17 @@ export class Piece {
         this.matrix.setFromArray(tempMatrix.get());
     }
 
-    isFree(board, x, y) {
+    isFree(x, y) {
         let free = true;
         for (let py = 0; py < this.height; py++) {
             if (!free){
                 break;
             }
             for (let px = 0; px < this.width; px++) {
-                if (this.matrix.getValue(px, py) !=0 && board.matrix.getValue(x+px, y+py) != 0) {
+                if (this.matrix.getValue(px, py) !=0 &&
+                    (this.board.matrix.getValue(x+px, y+py) != 0 ||
+                    x+px < 0 ||
+                    y+py < 0)) {
                     free = false;
                     break;
                 }
@@ -110,25 +114,45 @@ export class Piece {
         return free;
     }
 
-    put(board, x, y){
-        if (!board.matrix.isValidCoordinates(x, y) ||
-            !board.matrix.isValidCoordinates(x + this.width - 1, y + this.height - 1) ||
-            !this.isFree(board, x, y)) {
+    addToBoard(x, y) {
+        this.removeFromBoard(this.x, this.y);
+
+        if (!this.isFree(x, y)) {
+            this.addToBoard(this.x, this.y);
             return;
         }
 
         for (let py = 0; py < this.height; py++) {
             for (let px = 0; px < this.width; px++) {
-                board.matrix.setValue(
-                    x + px,
-                    y + py,
-                    this.matrix.getValue(px, py)
-                );
+                if (this.matrix.getValue(px, py) != 0) {
+                    this.board.matrix.setValue(
+                        x + px,
+                        y + py,
+                        this.matrix.getValue(px, py)
+                    );
+                }
+            }
+        }
+
+        this.x = x;
+        this.y = y;
+    }
+
+    removeFromBoard(x, y) {
+        for (let py = 0; py < this.height; py++) {
+            for (let px = 0; px < this.width; px++) {
+                if (this.matrix.getValue(px, py) != 0) {
+                    this.board.matrix.setValue(
+                       x + px,
+                        y + py,
+                        0
+                    );
+                }
             }
         }
     }
 
-    move(board, keyPressed){
+    move(keyPressed) {
         const newCoord = {
             'ArrowDown': {
                 'x': this.x,
@@ -143,7 +167,8 @@ export class Piece {
                 'y': this.y
             }
         }
-        this.put(board, newCoord[keyPressed].x, newCoord[keyPressed].y);
-        board.draw();
+
+        this.addToBoard(newCoord[keyPressed].x, newCoord[keyPressed].y);
+        this.board.draw();
     }
 }
