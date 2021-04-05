@@ -5,6 +5,8 @@ import { Matrix } from './matrix.js';
 export class Piece {
     constructor(pieceId) {
         this.pieceId = pieceId;
+        this.x = 3;
+        this.y = 0;
         this.matrix = new Matrix(4, 4);
 
         const pieces = [
@@ -92,15 +94,56 @@ export class Piece {
         this.matrix.setFromArray(tempMatrix.get());
     }
 
+    isFree(board, x, y) {
+        let free = true;
+        for (let py = 0; py < this.height; py++) {
+            if (!free){
+                break;
+            }
+            for (let px = 0; px < this.width; px++) {
+                if (this.matrix.getValue(px, py) !=0 && board.matrix.getValue(x+px, y+py) != 0) {
+                    free = false;
+                    break;
+                }
+            }
+        }
+        return free;
+    }
+
     put(board, x, y){
+        if (!board.matrix.isValidCoordinates(x, y) ||
+            !board.matrix.isValidCoordinates(x + this.width - 1, y + this.height - 1) ||
+            !this.isFree(board, x, y)) {
+            return;
+        }
+
         for (let py = 0; py < this.height; py++) {
             for (let px = 0; px < this.width; px++) {
                 board.matrix.setValue(
                     x + px,
                     y + py,
                     this.matrix.getValue(px, py)
-                )
+                );
             }
         }
+    }
+
+    move(board, keyPressed){
+        const newCoord = {
+            'ArrowDown': {
+                'x': this.x,
+                'y': this.y + 1,
+            },
+            'ArrowLeft': {
+                'x': this.x - 1,
+                'y': this.y,
+            },
+            'ArrowRight': {
+                'x': this.x + 1,
+                'y': this.y
+            }
+        }
+        this.put(board, newCoord[keyPressed].x, newCoord[keyPressed].y);
+        board.draw();
     }
 }
