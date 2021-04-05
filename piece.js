@@ -69,14 +69,12 @@ export class Piece {
         for (let py = 0; py < this.height; py++) {
             for (let px = 0; px < this.width; px++) {
                 if (isClockWise) {
-                    // temp[py][px] = this.matrix[3-px][py];
                     tempMatrix.setValue(
                         px,
                         py,
                         this.matrix.getValue(py, this.height-1-px)
                     );
                 } else {
-                    // temp[py][px] = this.matrix[px][3-py];
                     tempMatrix.setValue(
                         px,
                         py,
