@@ -20,7 +20,11 @@ function logKey(k) {
 }
 
 function nextPiece() {
-    currentPiece = new Piece(board, Math.floor(Math.random() * 7) + 1);
+    currentPiece = new Piece(board, Math.ceil(Math.random() * 6) + 1);
+    if (!currentPiece.succeed) {
+        return false;
+    }
+    return true;
 }
 
 function init(){
@@ -30,28 +34,6 @@ function init(){
 
     // Board initial state
     board = new Board(context, 20, 10);
-    board.matrix.setFromArray([
-        [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0 ,0],
-        [0, 0, 3, 3, 0, 0, 0, 0, 0 ,0],
-        [2, 2, 2, 3, 0, 3, 3, 3, 3 ,3],
-        [3, 0, 2, 3, 0, 3, 0, 0, 6 ,3],
-        [3, 6, 6, 6, 0, 2, 2, 6, 6 ,3],
-        [3, 3, 6, 0, 0, 2, 5, 5, 6 ,0],
-        [2, 2, 0, 0, 0, 2, 5, 5, 5 ,1],
-        [2, 7, 7, 1, 0, 5, 5, 4, 4 ,1],
-        [2, 7, 7, 1, 0, 5, 4, 4, 0 ,1],
-        [7, 7, 0, 1, 0, 0, 6, 5, 5 ,1],
-        [7, 7, 0, 1, 0, 6, 6, 6, 5 ,5]
-    ]);
 
     // Keypress event listener
     document.onkeydown = logKey;
@@ -67,7 +49,6 @@ function init(){
 
 }
 
-
 function draw() {
     board.draw();
 }
@@ -78,13 +59,18 @@ function update(timeStamp) {
         move = currentPiece.tryMove('ArrowDown');
         lastTime = timeStamp;
         if (!move) {
-            nextPiece();
+            return nextPiece();
         }
     }
+    return true;
 }
 
 function gameLoop(timeStamp) {
-    update(timeStamp);
+    if (!update(timeStamp)) {
+        alert("Game Over!");
+        init();
+    }
+
     draw();
     window.requestAnimationFrame(gameLoop);
 }

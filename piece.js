@@ -6,6 +6,7 @@ export class Piece {
     constructor(board, pieceId) {
         this.board = board;
         this.pieceId = pieceId;
+        this.succeed = true;
         this.x = 3;
         this.y = 0;
 
@@ -54,8 +55,14 @@ export class Piece {
 
         this.matrix = new Matrix(pieces[this.pieceId - 1].length, pieces[this.pieceId - 1][0].length);
         this.matrix.setFromArray(pieces[this.pieceId - 1]);
+
         this.height = this.matrix.rows;
         this.width =  this.matrix.columns;
+
+        let canAddFirstTime = this.tryAddToBoard(this.x, this.y);
+        if (!canAddFirstTime) {
+            this.succeed = false;
+        }
     }
 
     tryRotate(isClockWise) {
@@ -83,7 +90,6 @@ export class Piece {
                         }
                     }
                 }
-
 
         this.removeFromBoard(this.x, this.y);
 
@@ -118,10 +124,14 @@ export class Piece {
     }
 
     tryAddToBoard(newX, newY) {
-        this.removeFromBoard(this.x, this.y);
+        if (newY != 0) {
+            this.removeFromBoard(this.x, this.y);
+        }
 
         if (!this.isFree(this.matrix, newX, newY)) {
-            this.tryAddToBoard(this.x, this.y);
+            if (newY != 0) {
+                this.tryAddToBoard(this.x, this.y);
+            }
             return false;
         }
 
