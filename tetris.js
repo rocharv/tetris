@@ -7,11 +7,20 @@ let board;
 let canvas;
 let currentPiece;
 let context;
+let lastTime;
+let move;
 
 window.onload = init;
 
 function logKey(k) {
-    currentPiece.move(k.code);
+    move = currentPiece.tryMove(k.code);
+    if (!move && k.code == 'ArrowDown') {
+        nextPiece();
+    }
+}
+
+function nextPiece() {
+    currentPiece = new Piece(board, Math.floor(Math.random() * 7) + 1);
 }
 
 function init(){
@@ -48,7 +57,10 @@ function init(){
     document.onkeydown = logKey;
 
     // First piece is taken
-    currentPiece = new Piece(board, Math.floor(Math.random() * 7) + 1);
+    nextPiece();
+
+    // Reset clock
+    lastTime = 0;
 
     // Start the first frame request
     window.requestAnimationFrame(gameLoop);
@@ -61,10 +73,18 @@ function draw() {
 }
 
 function update(timeStamp) {
+    let isDescentTime = (timeStamp - lastTime) > 1000;
+    if (isDescentTime) {
+        move = currentPiece.tryMove('ArrowDown');
+        lastTime = timeStamp;
+        if (!move) {
+            nextPiece();
+        }
+    }
 }
 
 function gameLoop(timeStamp) {
+    update(timeStamp);
     draw();
-
     window.requestAnimationFrame(gameLoop);
 }

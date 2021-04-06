@@ -58,12 +58,12 @@ export class Piece {
         this.width =  this.matrix.columns;
     }
 
-    rotate(isClockWise) {
+    tryRotate(isClockWise) {
         let tempMatrix = new Matrix(this.height, this.width);
 
         const oPiece = this.pieceId == 7;
         if (oPiece) {
-            return;
+            return false;
         }
 
         for (let py = 0; py < this.height; py++) {
@@ -73,24 +73,28 @@ export class Piece {
                         px,
                         py,
                         this.matrix.getValue(py, this.height-1-px)
-                    );
-                } else {
-                    tempMatrix.setValue(
-                        px,
-                        py,
-                        this.matrix.getValue(this.width-1-py, px)
-                    );
+                        );
+                    } else {
+                        tempMatrix.setValue(
+                            px,
+                            py,
+                            this.matrix.getValue(this.width-1-py, px)
+                            );
+                        }
+                    }
                 }
-            }
-        }
+
 
         this.removeFromBoard(this.x, this.y);
 
-        if (this.isFree(tempMatrix, this.x, this.y)) {
-            this.matrix.setFromArray(tempMatrix.get());
+        if (!this.isFree(tempMatrix, this.x, this.y)) {
+            this.tryAddToBoard(this.x, this.y);
+            return false;
         }
 
-        this.addToBoard(this.x, this.y);
+        this.matrix.setFromArray(tempMatrix.get());
+        this.tryAddToBoard(this.x, this.y);
+        return true;
 
     }
 
@@ -113,28 +117,31 @@ export class Piece {
         return free;
     }
 
-    addToBoard(x, y) {
+    tryAddToBoard(newX, newY) {
         this.removeFromBoard(this.x, this.y);
 
-        if (!this.isFree(this.matrix, x, y)) {
-            this.addToBoard(this.x, this.y);
-            return;
+        if (!this.isFree(this.matrix, newX, newY)) {
+            this.tryAddToBoard(this.x, this.y);
+            return false;
         }
 
         for (let py = 0; py < this.height; py++) {
             for (let px = 0; px < this.width; px++) {
                 if (this.matrix.getValue(px, py) != 0) {
                     this.board.matrix.setValue(
-                        x + px,
-                        y + py,
+                        newX + px,
+                        newY + py,
                         this.matrix.getValue(px, py)
                     );
                 }
             }
         }
 
-        this.x = x;
-        this.y = y;
+        this.x = newX;
+        this.y = newY;
+        this.board.draw();
+
+        return true;
     }
 
     removeFromBoard(x, y) {
@@ -151,7 +158,7 @@ export class Piece {
         }
     }
 
-    move(keyPressed) {
+    tryMove(keyPressed) {
         const newMove = {
             'ArrowDown': {
                 'x': this.x,
@@ -168,15 +175,13 @@ export class Piece {
         }
 
         if (keyPressed == 'ArrowUp') {
-            this.rotate(true);
-            return;
+            return this.tryRotate(true);
         }
 
         if (!(keyPressed in newMove)) {
-            return;
+            return false;
         }
 
-        this.addToBoard(newMove[keyPressed].x, newMove[keyPressed].y);
-        this.board.draw();
+        return this.tryAddToBoard(newMove[keyPressed].x, newMove[keyPressed].y);
     }
 }
