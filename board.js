@@ -8,8 +8,8 @@ export class Board {
         this.matrix = new Matrix(rows, columns);
     }
 
-    drawCell(boardX, boardY, cellWidth, cellHeight, cellState) {
-        const colorState = {
+    drawCell(boardX, boardY, cellWidth, cellHeight, cellColor) {
+        const cellColorSet = {
             0: {
                 'main': '#111111',
                 'shaded': '#000000',
@@ -52,9 +52,9 @@ export class Board {
             }
         };
 
-        let mainColor = colorState[cellState].main;
-        let shadedColor = colorState[cellState].shaded;
-        let illuminatedColor = colorState[cellState].illuminated;
+        let mainColor = cellColorSet[cellColor].main;
+        let shadedColor = cellColorSet[cellColor].shaded;
+        let illuminatedColor = cellColorSet[cellColor].illuminated;
 
         this.context.fillStyle = mainColor;
         this.context.fillRect(boardX * cellWidth + 2, boardY * cellHeight + 2, cellWidth - 2, cellHeight - 2);

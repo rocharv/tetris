@@ -10,7 +10,7 @@ export class Piece {
         this.x = 3;
         this.y = 0;
 
-        const pieces = [
+        const pieceSet = [
             [
                 [0, 1, 0, 0],
                 [0, 1, 0, 0],
@@ -47,45 +47,44 @@ export class Piece {
                 [7, 7]
             ]
         ];
+        const pieceSetIndex = this.pieceId - 1;
 
-        const invalidPieceId = (this.pieceId < 1 || this.pieceId > pieces.length);
+        const invalidPieceId = (this.pieceId < 1 || this.pieceId > pieceSet.length);
         if (invalidPieceId) {
             return;
         }
 
-        this.matrix = new Matrix(pieces[this.pieceId - 1].length, pieces[this.pieceId - 1][0].length);
-        this.matrix.setFromArray(pieces[this.pieceId - 1]);
+        this.pieceSize = pieceSet[pieceSetIndex].length;
+        this.matrix = new Matrix(this.pieceSize, this.pieceSize);
+        this.matrix.setFromArray(pieceSet[pieceSetIndex]);
 
-        this.height = this.matrix.rows;
-        this.width =  this.matrix.columns;
-
-        let canAddFirstTime = this.tryAddToBoard(this.x, this.y);
-        if (!canAddFirstTime) {
+        let addedToBoardFirstTime = this.tryAddToBoard(this.x, this.y);
+        if (!addedToBoardFirstTime) {
             this.succeed = false;
         }
     }
 
     tryRotate(isClockWise) {
-        let tempMatrix = new Matrix(this.height, this.width);
+        let tempMatrix = new Matrix(this.pieceSize, this.pieceSize);
 
         const oPiece = this.pieceId == 7;
         if (oPiece) {
             return false;
         }
 
-        for (let py = 0; py < this.height; py++) {
-            for (let px = 0; px < this.width; px++) {
+        for (let py = 0; py < this.pieceSize; py++) {
+            for (let px = 0; px < this.pieceSize; px++) {
                 if (isClockWise) {
                     tempMatrix.setValue(
                         px,
                         py,
-                        this.matrix.getValue(py, this.height-1-px)
+                        this.matrix.getValue(py, this.pieceSize-1-px)
                         );
                     } else {
                         tempMatrix.setValue(
                             px,
                             py,
-                            this.matrix.getValue(this.width-1-py, px)
+                            this.matrix.getValue(this.pieceSize-1-py, px)
                             );
                         }
                     }
@@ -106,11 +105,11 @@ export class Piece {
 
     isFree(pieceMatrix, x, y) {
         let free = true;
-        for (let py = 0; py < this.height; py++) {
+        for (let py = 0; py < this.pieceSize; py++) {
             if (!free){
                 break;
             }
-            for (let px = 0; px < this.width; px++) {
+            for (let px = 0; px < this.pieceSize; px++) {
                 if (pieceMatrix.getValue(px, py) !=0 &&
                     (this.board.matrix.getValue(x+px, y+py) != 0 ||
                     x+px < 0 ||
@@ -135,8 +134,8 @@ export class Piece {
             return false;
         }
 
-        for (let py = 0; py < this.height; py++) {
-            for (let px = 0; px < this.width; px++) {
+        for (let py = 0; py < this.pieceSize; py++) {
+            for (let px = 0; px < this.pieceSize; px++) {
                 if (this.matrix.getValue(px, py) != 0) {
                     this.board.matrix.setValue(
                         newX + px,
@@ -155,8 +154,8 @@ export class Piece {
     }
 
     removeFromBoard(x, y) {
-        for (let py = 0; py < this.height; py++) {
-            for (let px = 0; px < this.width; px++) {
+        for (let py = 0; py < this.pieceSize; py++) {
+            for (let px = 0; px < this.pieceSize; px++) {
                 if (this.matrix.getValue(px, py) != 0) {
                     this.board.matrix.setValue(
                        x + px,

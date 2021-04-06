@@ -67,10 +67,18 @@ function update(timeStamp) {
 
 function gameLoop(timeStamp) {
     if (!update(timeStamp)) {
-        alert("Game Over!");
-        init();
+        gameOver();
+        return;
     }
 
     draw();
     window.requestAnimationFrame(gameLoop);
+}
+
+function gameOver() {
+    if (confirm("Game Over!\n\nDo you want to play again?")) {
+        init();
+    } else {
+        return;
+    }
 }
