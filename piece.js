@@ -110,10 +110,10 @@ export class Piece {
                 break;
             }
             for (let px = 0; px < this.pieceSize; px++) {
-                if (pieceMatrix.getValue(px, py) !=0 &&
+                if (pieceMatrix.getValue(px, py) != 0 &&
                     (this.board.matrix.getValue(x+px, y+py) != 0 ||
-                    x+px < 0 ||
-                    y+py < 0)) {
+                    x + px < 0 ||
+                    y + py < 0)) {
                     free = false;
                     break;
                 }
@@ -183,7 +183,11 @@ export class Piece {
             }
         }
 
-        if (keyPressed == 'ArrowUp') {
+        if (keyPressed == 'KeyA') {
+            return this.tryRotate(false);
+        }
+
+        if (keyPressed == 'KeyZ' || keyPressed == 'ArrowUp') {
             return this.tryRotate(true);
         }
 
