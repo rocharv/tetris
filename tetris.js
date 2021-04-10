@@ -24,6 +24,9 @@ function nextPiece() {
     if (!currentPiece.succeed) {
         return false;
     }
+
+    //board.clearCompleteLines();
+
     return true;
 }
 
