@@ -14,20 +14,8 @@ export class Matrix {
         }
     }
 
-    isValidCoordinates(x, y) {
-        return (
-            x >= 0 &&
-            x < this.columns &&
-            y >= 0 &&
-            y < this.rows
-        );
-    }
-
-    setValue(x, y, value) {
-        if (!this.isValidCoordinates(x, y)) {
-            return;
-        }
-        this.matrix[y][x] = value;
+    get() {
+        return this.matrix;
     }
 
     getValue(x, y) {
@@ -37,11 +25,23 @@ export class Matrix {
         return this.matrix[y][x];
     }
 
+    isValidCoordinates(x, y) {
+        return (
+            x >= 0 &&
+            x < this.columns &&
+            y >= 0 &&
+            y < this.rows
+        );
+    }
+
     setFromArray(arr) {
         this.matrix = JSON.parse(JSON.stringify(arr));
     }
 
-    get() {
-        return this.matrix;
+    setValue(x, y, value) {
+        if (!this.isValidCoordinates(x, y)) {
+            return;
+        }
+        this.matrix[y][x] = value;
     }
 }

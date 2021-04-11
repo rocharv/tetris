@@ -8,10 +8,41 @@ export class Board {
         this.matrix = new Matrix(rows, columns);
     }
 
-    clearCompleteLines() {
+    clearCompleteRows() {
+        let completeRows = this.getCompleteRows();
+        if (completeRows.length > 0) {
+            this.compactRowsDown(completeRows);
+        }
+    }
+
+    compactRowsDown(completeRows) {
+        let tempMatrix = new Matrix(this.matrix.rows, this.matrix.columns);
+        let ty = this.matrix.rows;
+
+        for (let y = this.matrix.rows; y >= 0; y--) {
+            if (!completeRows.includes(y)) {
+                for (let x = 0; x < this.matrix.columns; x++) {
+                    tempMatrix.setValue(
+                        x,
+                        ty,
+                        this.matrix.getValue(x, y)
+                    );
+                }
+                ty--;
+            }
+        }
+        this.matrix.setFromArray(tempMatrix.get());
+    }
+
+    draw() {
+        let cellHeight = (this.context.canvas.height / this.matrix.rows) >> 0;
+        let cellWidth = (this.context.canvas.width / this.matrix.columns) >> 0;
+        let cellState;
+
         for (let y = 0; y < this.matrix.rows; y++) {
             for (let x = 0; x < this.matrix.columns; x++) {
                 cellState = this.matrix.getValue(x, y);
+                this.drawCell(x, y, cellWidth, cellHeight, cellState);
             }
         }
     }
@@ -60,9 +91,9 @@ export class Board {
             }
         };
 
+        let illuminatedColor = cellColorSet[cellColor].illuminated;
         let mainColor = cellColorSet[cellColor].main;
         let shadedColor = cellColorSet[cellColor].shaded;
-        let illuminatedColor = cellColorSet[cellColor].illuminated;
 
         const pixel = this.context.getImageData(boardX * cellWidth + 2, boardY * cellHeight + 2, 1, 1);
         const pixelColor = `rgba(${pixel.data[0]}, ${pixel.data[1]}, ${pixel.data[2]}, ${pixel.data[3] / 255})`;
@@ -80,16 +111,24 @@ export class Board {
         }
     }
 
-    draw() {
-        let cellWidth = (this.context.canvas.width / this.matrix.columns) >> 0;
-        let cellHeight = (this.context.canvas.height / this.matrix.rows) >> 0;
+    getCompleteRows() {
         let cellState;
-
+        let isFullRow;
+        let fullRows = [];
         for (let y = 0; y < this.matrix.rows; y++) {
+            isFullRow = true;
             for (let x = 0; x < this.matrix.columns; x++) {
                 cellState = this.matrix.getValue(x, y);
-                this.drawCell(x, y, cellWidth, cellHeight, cellState);
+                if (cellState == 0) {
+                    isFullRow = false;
+                    break;
+                }
+            }
+            if (isFullRow) {
+                fullRows.push(y);
             }
         }
+
+        return fullRows;
     }
 }
