@@ -34,7 +34,7 @@ function gameOver() {
     }
 }
 
-function init(){
+function init() {
     canvas = document.getElementById('canvas');
     context = canvas.getContext('2d');
     board = new Board(context, 20, 10);

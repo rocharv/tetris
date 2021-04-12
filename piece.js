@@ -64,6 +64,9 @@ export class Piece {
         }
     }
 
+    drop() {
+    }
+
     isFree(pieceMatrix, x, y) {
         let free = true;
         for (let py = 0; py < this.pieceSize; py++) {
@@ -142,12 +145,16 @@ export class Piece {
             }
         }
 
-        if (keyPressed == 'KeyA') {
+        if (keyPressed == 'KeyZ') {
             return this.tryRotate(false);
         }
 
-        if (keyPressed == 'KeyZ' || keyPressed == 'ArrowUp') {
+        if (keyPressed == 'KeyX' || keyPressed == 'ArrowUp') {
             return this.tryRotate(true);
+        }
+
+        if (keyPressed == 'Space') {
+            return this.drop();
         }
 
         if (!(keyPressed in newMove)) {
