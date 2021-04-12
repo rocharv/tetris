@@ -58,7 +58,7 @@ export class Piece {
         this.matrix = new Matrix(this.pieceSize, this.pieceSize);
         this.matrix.setFromArray(pieceSet[pieceSetIndex]);
 
-        let addedToBoardFirstTime = this.tryAddToBoard(this.x, this.y);
+        let addedToBoardFirstTime = this.tryAddToBoard(this.x, this.y, true);
         if (!addedToBoardFirstTime) {
             this.successfullyPlaced = false;
         }
@@ -88,7 +88,7 @@ export class Piece {
             for (let px = 0; px < this.pieceSize; px++) {
                 if (this.matrix.getValue(px, py) != 0) {
                     this.board.matrix.setValue(
-                       x + px,
+                        x + px,
                         y + py,
                         0
                     );
@@ -97,15 +97,13 @@ export class Piece {
         }
     }
 
-    tryAddToBoard(newX, newY) {
-        if (newY != 0) {
+    tryAddToBoard(newX, newY, isFirstMove = false) {
+        if (!isFirstMove) {
             this.removeFromBoard(this.x, this.y);
         }
 
         if (!this.isFree(this.matrix, newX, newY)) {
-            if (newY != 0) {
-                this.tryAddToBoard(this.x, this.y);
-            }
+            this.tryAddToBoard(this.x, this.y);
             return false;
         }
 

@@ -58,7 +58,7 @@ function logKey(k) {
 function nextPiece() {
     board.clearCompleteRows();
 
-    currentPiece = new Piece(board, Math.trunc(Math.random() * 6) + 1);
+    currentPiece = new Piece(board, Math.trunc(Math.random() * 7) + 1);
     if (!currentPiece.successfullyPlaced) {
         return false;
     }
