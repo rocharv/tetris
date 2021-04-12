@@ -97,7 +97,7 @@ export class Board {
 
         const pixel = this.context.getImageData(boardX * cellWidth + 2, boardY * cellHeight + 2, 1, 1);
         const pixelColor = `rgba(${pixel.data[0]}, ${pixel.data[1]}, ${pixel.data[2]}, ${pixel.data[3] / 255})`;
-        if (pixelColor != mainColor) {
+        if (pixelColor != illuminatedColor) {
             this.context.fillStyle = mainColor;
             this.context.fillRect(boardX * cellWidth + 2, boardY * cellHeight + 2, cellWidth - 2, cellHeight - 2);
 
