@@ -6,6 +6,8 @@ export class Piece {
     constructor(board, pieceId) {
         this.board = board;
         this.pieceId = pieceId;
+        this.pieceShadowId = pieceId + 10;
+        this.shadowY = 0;
         this.successfullyPlaced = true;
         this.x = 3;
         this.y = 0;
@@ -64,6 +66,31 @@ export class Piece {
         }
     }
 
+    addShadowToBoard() {
+        this.removeFromBoard(this.x, this.y);
+        this.shadowY = this.y;
+        while (this.isFree(this.matrix, this.x, this.shadowY + 1)) {
+            this.shadowY++;
+        }
+
+        this.addToBoard(this.x, this.shadowY, this.pieceShadowId);
+        this.addToBoard(this.x, this.y, this.pieceId);
+    }
+
+    addToBoard(newX, newY, value) {
+        for (let py = 0; py < this.pieceSize; py++) {
+            for (let px = 0; px < this.pieceSize; px++) {
+                if (this.matrix.getValue(px, py) != 0) {
+                    this.board.matrix.setValue(
+                        newX + px,
+                        newY + py,
+                        value
+                    );
+                }
+            }
+        }
+    }
+
     drop() {
     }
 
@@ -77,7 +104,9 @@ export class Piece {
                 if (pieceMatrix.getValue(px, py) != 0 &&
                     (this.board.matrix.getValue(x + px, y + py) != 0 ||
                     x + px < 0 ||
-                    y + py < 0)) {
+                    y + py < 0 ||
+                    x + px > this.board.matrix.columns -1 ||
+                    y + py > this.board.matrix.rows - 1)) {
                     free = false;
                     break;
                 }
@@ -87,20 +116,12 @@ export class Piece {
     }
 
     removeFromBoard(x, y) {
-        for (let py = 0; py < this.pieceSize; py++) {
-            for (let px = 0; px < this.pieceSize; px++) {
-                if (this.matrix.getValue(px, py) != 0) {
-                    this.board.matrix.setValue(
-                        x + px,
-                        y + py,
-                        0
-                    );
-                }
-            }
-        }
+        this.addToBoard(x, y, 0);
     }
 
     tryAddToBoard(newX, newY, isFirstMove = false) {
+
+        this.removeFromBoard(this.x, this.shadowY);
         if (!isFirstMove) {
             this.removeFromBoard(this.x, this.y);
         }
@@ -110,20 +131,12 @@ export class Piece {
             return false;
         }
 
-        for (let py = 0; py < this.pieceSize; py++) {
-            for (let px = 0; px < this.pieceSize; px++) {
-                if (this.matrix.getValue(px, py) != 0) {
-                    this.board.matrix.setValue(
-                        newX + px,
-                        newY + py,
-                        this.matrix.getValue(px, py)
-                    );
-                }
-            }
-        }
+        this.addToBoard(newX, newY, this.pieceId);
 
         this.x = newX;
         this.y = newY;
+
+        this.addShadowToBoard();
         this.board.draw();
 
         return true;
@@ -172,6 +185,9 @@ export class Piece {
             return false;
         }
 
+        this.removeFromBoard(this.x, this.y);
+        this.removeFromBoard(this.x, this.shadowY);
+
         for (let py = 0; py < this.pieceSize; py++) {
             for (let px = 0; px < this.pieceSize; px++) {
                 if (isClockWise) {
@@ -189,8 +205,6 @@ export class Piece {
                         }
                     }
                 }
-
-        this.removeFromBoard(this.x, this.y);
 
         if (!this.isFree(tempMatrix, this.x, this.y)) {
             this.tryAddToBoard(this.x, this.y);

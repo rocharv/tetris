@@ -88,9 +88,43 @@ export class Board {
                 'main': 'rgba(191, 191, 0, 1)',
                 'shaded': 'rgba(127, 127, 0, 1)',
                 'illuminated': 'rgba(255, 255, 0, 1)'
+            },
+            11: {
+                'main': 'rgba(0, 95, 95, 1)',
+                'shaded': 'rgba(0, 63, 63, 1)',
+                'illuminated': 'rgba(0, 127, 127, .1)'
+            },
+            12: {
+                'main': 'rgba(0, 0, 95, 1)',
+                'shaded': 'rgba(0, 0, 63, 1)',
+                'illuminated': 'rgba(0, 0, 127, .1)'
+            },
+            13: {
+                'main': 'rgba(95, 63, 0, 1)',
+                'shaded': 'rgba(63, 31, 0, 1)',
+                'illuminated': 'rgba(127, 95, 0, .1)'
+            },
+            14: {
+                'main': 'rgba(0, 95, 0, 1)',
+                'shaded': 'rgba(0, 63, 0, 1)',
+                'illuminated': 'rgba(0, 127, 0, .1)'
+            },
+            15: {
+                'main': 'rgba(95, 0, 0, 1)',
+                'shaded': 'rgba(63, 0, 0, 1)',
+                'illuminated': 'rgba(127, 0, 0, .1)'
+            },
+            16: {
+                'main': 'rgba(95, 0, 95, 1)',
+                'shaded': 'rgba(63, 0, 63, 1)',
+                'illuminated': 'rgba(127, 0, 127, .1)'
+            },
+            17: {
+                'main': 'rgba(95, 95, 0, 1)',
+                'shaded': 'rgba(63, 63, 0, 1)',
+                'illuminated': 'rgba(127, 127, 0, .1)'
             }
         };
-
         let illuminatedColor = cellColorSet[cellColor].illuminated;
         let mainColor = cellColorSet[cellColor].main;
         let shadedColor = cellColorSet[cellColor].shaded;
@@ -98,6 +132,7 @@ export class Board {
         const pixel = this.context.getImageData(boardX * cellWidth + 2, boardY * cellHeight + 2, 1, 1);
         const pixelColor = `rgba(${pixel.data[0]}, ${pixel.data[1]}, ${pixel.data[2]}, ${pixel.data[3] / 255})`;
         if (pixelColor != illuminatedColor) {
+
             this.context.fillStyle = mainColor;
             this.context.fillRect(boardX * cellWidth + 2, boardY * cellHeight + 2, cellWidth - 2, cellHeight - 2);
 
