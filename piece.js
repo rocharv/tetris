@@ -102,7 +102,7 @@ export class Piece {
         this.y = tempY;
         this.addToBoard(this.x, this.y, this.pieceId);
 
-        return false;
+        return true;
     }
 
     isFree(pieceMatrix, x, y) {
@@ -154,38 +154,24 @@ export class Piece {
     tryMove(keyPressed) {
         this.removeFromBoard(this.x, this.shadowY);
 
-        const newMove = {
-            'ArrowDown': {
-                'x': this.x,
-                'y': this.y + 1,
-            },
-            'ArrowLeft': {
-                'x': this.x - 1,
-                'y': this.y,
-            },
-            'ArrowRight': {
-                'x': this.x + 1,
-                'y': this.y
-            }
+        switch(keyPressed) {
+            case 'ArrowDown':
+                return this.tryAddToBoard(this.x, this.y + 1);
+            case 'ArrowLeft':
+                return this.tryAddToBoard(this.x - 1, this.y);
+            case 'ArrowRight':
+                return this.tryAddToBoard(this.x + 1, this.y);
+            case 'ArrowUp':
+                return this.tryRotate(true);
+            case 'KeyB':
+                return this.tryRotate(true);
+            case 'KeyV':
+                return this.tryRotate(false);
+            case 'Space':
+                return this.drop();
+            default:
+                return false;
         }
-
-        if (keyPressed == 'KeyZ') {
-            return this.tryRotate(false);
-        }
-
-        if (keyPressed == 'KeyX' || keyPressed == 'ArrowUp') {
-            return this.tryRotate(true);
-        }
-
-        if (keyPressed == 'Space') {
-            return this.drop();
-        }
-
-        if (!(keyPressed in newMove)) {
-            return false;
-        }
-
-        return this.tryAddToBoard(newMove[keyPressed].x, newMove[keyPressed].y);
     }
 
     tryRotate(isClockWise) {

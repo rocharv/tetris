@@ -50,7 +50,7 @@ function init() {
 
 function logKey(k) {
     move = currentPiece.tryMove(k.code);
-    if (!move && (k.code == 'ArrowDown' || k.code == 'Space')) {
+    if (!move && k.code == 'ArrowDown' || k.code == 'Space') {
         nextPiece();
     }
 }
