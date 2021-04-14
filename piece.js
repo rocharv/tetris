@@ -152,6 +152,8 @@ export class Piece {
     }
 
     tryMove(keyPressed) {
+        this.removeFromBoard(this.x, this.shadowY);
+
         const newMove = {
             'ArrowDown': {
                 'x': this.x,
@@ -183,7 +185,6 @@ export class Piece {
             return false;
         }
 
-        this.removeFromBoard(this.x, this.shadowY);
         return this.tryAddToBoard(newMove[keyPressed].x, newMove[keyPressed].y);
     }
 
@@ -196,7 +197,6 @@ export class Piece {
         }
 
         this.removeFromBoard(this.x, this.y);
-        this.removeFromBoard(this.x, this.shadowY);
 
         for (let py = 0; py < this.pieceSize; py++) {
             for (let px = 0; px < this.pieceSize; px++) {
