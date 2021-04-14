@@ -60,24 +60,24 @@ export class Piece {
         this.matrix = new Matrix(this.pieceSize, this.pieceSize);
         this.matrix.setFromArray(pieceSet[pieceSetIndex]);
 
-        let addedToBoardFirstTime = this.tryAddToBoard(this.x, this.y, true);
+        let addedToBoardFirstTime = this.tryTranslate(this.x, this.y);
         if (!addedToBoardFirstTime) {
             this.successfullyPlaced = false;
         }
     }
 
     addShadowToBoard() {
-        this.removeFromBoard(this.x, this.y);
         this.shadowY = this.y;
+
         while (this.isFree(this.matrix, this.x, this.shadowY + 1)) {
             this.shadowY++;
         }
 
-        this.addToBoard(this.x, this.shadowY, this.pieceShadowId);
-        this.addToBoard(this.x, this.y, this.pieceId);
+        this.addToBoardAndDraw(this.x, this.shadowY, this.pieceShadowId);
+        this.addToBoardAndDraw(this.x, this.y, this.pieceId);
     }
 
-    addToBoard(newX, newY, value) {
+    addToBoardAndDraw(newX, newY, value) {
         for (let py = 0; py < this.pieceSize; py++) {
             for (let px = 0; px < this.pieceSize; px++) {
                 if (this.matrix.getValue(px, py) != 0) {
@@ -89,6 +89,7 @@ export class Piece {
                 }
             }
         }
+        this.board.draw();
     }
 
     drop() {
@@ -100,7 +101,7 @@ export class Piece {
         }
 
         this.y = tempY;
-        this.addToBoard(this.x, this.y, this.pieceId);
+        this.addToBoardAndDraw(this.x, this.y, this.pieceId);
 
         return true;
     }
@@ -127,40 +128,20 @@ export class Piece {
     }
 
     removeFromBoard(x, y) {
-        this.addToBoard(x, y, 0);
-    }
-
-    tryAddToBoard(newX, newY, isFirstMove = false) {
-        if (!isFirstMove) {
-            this.removeFromBoard(this.x, this.y);
-        }
-
-        if (!this.isFree(this.matrix, newX, newY)) {
-            this.tryAddToBoard(this.x, this.y);
-            return false;
-        }
-
-        this.addToBoard(newX, newY, this.pieceId);
-
-        this.x = newX;
-        this.y = newY;
-
-        this.addShadowToBoard();
-        this.board.draw();
-
-        return true;
+        this.addToBoardAndDraw(x, y, 0);
     }
 
     tryMove(keyPressed) {
+        this.removeFromBoard(this.x, this.y);
         this.removeFromBoard(this.x, this.shadowY);
 
         switch(keyPressed) {
             case 'ArrowDown':
-                return this.tryAddToBoard(this.x, this.y + 1);
+                return this.tryTranslate(this.x, this.y + 1);
             case 'ArrowLeft':
-                return this.tryAddToBoard(this.x - 1, this.y);
+                return this.tryTranslate(this.x - 1, this.y);
             case 'ArrowRight':
-                return this.tryAddToBoard(this.x + 1, this.y);
+                return this.tryTranslate(this.x + 1, this.y);
             case 'ArrowUp':
                 return this.tryRotate(true);
             case 'KeyB':
@@ -170,19 +151,13 @@ export class Piece {
             case 'Space':
                 return this.drop();
             default:
+                this.addShadowToBoard();
                 return false;
         }
     }
 
     tryRotate(isClockWise) {
         let tempMatrix = new Matrix(this.pieceSize, this.pieceSize);
-
-        const oPiece = this.pieceId == 7;
-        if (oPiece) {
-            return false;
-        }
-
-        this.removeFromBoard(this.x, this.y);
 
         for (let py = 0; py < this.pieceSize; py++) {
             for (let px = 0; px < this.pieceSize; px++) {
@@ -203,12 +178,30 @@ export class Piece {
                 }
 
         if (!this.isFree(tempMatrix, this.x, this.y)) {
-            this.tryAddToBoard(this.x, this.y);
+            this.addShadowToBoard();
+            this.addToBoardAndDraw(this.x, this.y, this.pieceId);
             return false;
         }
 
         this.matrix.setFromArray(tempMatrix.get());
-        this.tryAddToBoard(this.x, this.y);
+        this.addShadowToBoard();
+        this.addToBoardAndDraw(this.x, this.y, this.pieceId);
+
+        return true;
+    }
+
+    tryTranslate(newX, newY) {
+        if (!this.isFree(this.matrix, newX, newY)) {
+            this.addShadowToBoard();
+            this.addToBoardAndDraw(this.x, this.y, this.pieceId);
+            return false;
+        }
+
+        this.x = newX;
+        this.y = newY;
+
+        this.addShadowToBoard();
+        this.addToBoardAndDraw(this.x, this.y, this.pieceId);
 
         return true;
     }
