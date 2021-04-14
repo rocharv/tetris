@@ -92,6 +92,17 @@ export class Piece {
     }
 
     drop() {
+        this.removeFromBoard(this.x, this.y);
+        this.removeFromBoard(this.x, this.shadowY);
+        let tempY = this.y;
+        while (this.isFree(this.matrix, this.x, tempY + 1)) {
+            tempY++;
+        }
+
+        this.y = tempY;
+        this.addToBoard(this.x, this.y, this.pieceId);
+
+        return false;
     }
 
     isFree(pieceMatrix, x, y) {
@@ -120,8 +131,6 @@ export class Piece {
     }
 
     tryAddToBoard(newX, newY, isFirstMove = false) {
-
-        this.removeFromBoard(this.x, this.shadowY);
         if (!isFirstMove) {
             this.removeFromBoard(this.x, this.y);
         }
@@ -174,6 +183,7 @@ export class Piece {
             return false;
         }
 
+        this.removeFromBoard(this.x, this.shadowY);
         return this.tryAddToBoard(newMove[keyPressed].x, newMove[keyPressed].y);
     }
 

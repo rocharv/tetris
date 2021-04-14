@@ -90,39 +90,39 @@ export class Board {
                 'illuminated': 'rgba(255, 255, 0, 1)'
             },
             11: {
-                'main': 'rgba(0, 95, 95, 1)',
-                'shaded': 'rgba(0, 63, 63, 1)',
-                'illuminated': 'rgba(0, 127, 127, .1)'
+                'main': 'rgba(0, 47, 47, 1)',
+                'shaded': 'rgba(0, 31, 31, 1)',
+                'illuminated': 'rgba(0, 63, 63, 1)'
             },
             12: {
-                'main': 'rgba(0, 0, 95, 1)',
-                'shaded': 'rgba(0, 0, 63, 1)',
-                'illuminated': 'rgba(0, 0, 127, .1)'
+                'main': 'rgba(0, 0, 47, 1)',
+                'shaded': 'rgba(0, 0, 31, 1)',
+                'illuminated': 'rgba(0, 0, 63, 1)'
             },
             13: {
-                'main': 'rgba(95, 63, 0, 1)',
-                'shaded': 'rgba(63, 31, 0, 1)',
-                'illuminated': 'rgba(127, 95, 0, .1)'
+                'main': 'rgba(47, 31, 0, 1)',
+                'shaded': 'rgba(31, 15, 0, 1)',
+                'illuminated': 'rgba(63, 47, 0, 1)'
             },
             14: {
-                'main': 'rgba(0, 95, 0, 1)',
-                'shaded': 'rgba(0, 63, 0, 1)',
-                'illuminated': 'rgba(0, 127, 0, .1)'
+                'main': 'rgba(0, 47, 0, 1)',
+                'shaded': 'rgba(0, 31, 0, 1)',
+                'illuminated': 'rgba(0, 63, 0, 1)'
             },
             15: {
-                'main': 'rgba(95, 0, 0, 1)',
-                'shaded': 'rgba(63, 0, 0, 1)',
-                'illuminated': 'rgba(127, 0, 0, .1)'
+                'main': 'rgba(47, 0, 0, 1)',
+                'shaded': 'rgba(31, 0, 0, 1)',
+                'illuminated': 'rgba(63, 0, 0, 1)'
             },
             16: {
-                'main': 'rgba(95, 0, 95, 1)',
-                'shaded': 'rgba(63, 0, 63, 1)',
-                'illuminated': 'rgba(127, 0, 127, .1)'
+                'main': 'rgba(47, 0, 47, 1)',
+                'shaded': 'rgba(31, 0, 31, 1)',
+                'illuminated': 'rgba(63, 0, 63, 1)'
             },
             17: {
-                'main': 'rgba(95, 95, 0, 1)',
-                'shaded': 'rgba(63, 63, 0, 1)',
-                'illuminated': 'rgba(127, 127, 0, .1)'
+                'main': 'rgba(47, 47, 0, 1)',
+                'shaded': 'rgba(31, 31, 0, 1)',
+                'illuminated': 'rgba(63, 63, 0, 1)'
             }
         };
         let illuminatedColor = cellColorSet[cellColor].illuminated;
