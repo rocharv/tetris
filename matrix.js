@@ -19,13 +19,13 @@ export class Matrix {
     }
 
     getValue(x, y) {
-        if (!this.isValidCoordinates(x, y)) {
+        if (!this.isValidCoordinate(x, y)) {
             return;
         }
         return this.matrix[y][x];
     }
 
-    isValidCoordinates(x, y) {
+    isValidCoordinate(x, y) {
         return (
             x >= 0 &&
             x < this.columns &&
@@ -39,7 +39,7 @@ export class Matrix {
     }
 
     setValue(x, y, value) {
-        if (!this.isValidCoordinates(x, y)) {
+        if (!this.isValidCoordinate(x, y)) {
             return;
         }
         this.matrix[y][x] = value;
