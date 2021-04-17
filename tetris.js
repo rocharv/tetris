@@ -2,6 +2,7 @@
 
 import { Board } from './board.js';
 import { Piece } from './piece.js';
+import { RandomGenerator } from './random_generator.js';
 
 let board;
 let canvas;
@@ -9,6 +10,7 @@ let currentPiece;
 let context;
 let lastTime;
 let move;
+let randomGenerator;
 
 window.onload = init;
 
@@ -39,6 +41,8 @@ function init() {
     context = canvas.getContext('2d');
     board = new Board(context, 20, 10);
 
+    randomGenerator = new RandomGenerator(1, 7, 2);
+
     document.onkeydown = logKey;
 
     nextPiece();
@@ -58,7 +62,7 @@ function logKey(k) {
 function nextPiece() {
     board.clearCompleteRows();
 
-    currentPiece = new Piece(board, Math.trunc(Math.random() * 7) + 1);
+    currentPiece = new Piece(board, randomGenerator.getNextNumber());
     if (!currentPiece.successfullyPlaced) {
         return false;
     }
