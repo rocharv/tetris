@@ -4,6 +4,7 @@ import { Board } from './board.js';
 import { Piece } from './piece.js';
 import { RandomGenerator } from './random_generator.js';
 import { Score } from './score.js';
+import { Speed } from './speed.js';
 
 let board;
 let boardCanvas;
@@ -13,6 +14,7 @@ let lastTime;
 let move;
 let randomGenerator;
 let score;
+let speed;
 
 window.onload = init;
 
@@ -40,7 +42,9 @@ function gameOver() {
 
 function init() {
 
-    score = new Score();
+    speed = new Speed();
+    score = new Score(speed);
+
 
     boardCanvas = document.getElementById('boardCanvas');
     boardContext = boardCanvas.getContext('2d');
@@ -77,7 +81,7 @@ function nextPiece() {
 }
 
 function update(timeStamp) {
-    let isDescentTime = (timeStamp - lastTime) > 1000;
+    let isDescentTime = (timeStamp - lastTime) > speed.getDelay();
     if (isDescentTime) {
         move = currentPiece.tryMove('ArrowDown');
         lastTime = timeStamp;

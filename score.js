@@ -1,9 +1,12 @@
 'use strict';
 
+import { Speed } from './speed.js';
+
 export class Score {
-    constructor() {
+    constructor(speed) {
         this.lines = 0;
         this.points = 0;
+        this.speed = speed;
     }
 
     updateScore(linesAtOnce){
@@ -12,6 +15,8 @@ export class Score {
 
         const scorePerLinesAtOnce = [40, 100, 300, 1200];
         this.points += scorePerLinesAtOnce[linesAtOnce - 1] * (level + 1);
+
+        this.speed.updateLevel(level);
     }
 
     getPoints(){
