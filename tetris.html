@@ -9,21 +9,29 @@
     <body>
         <div id="space"></div>
         <div id="main">
-            <div id="scoreDiv">
-                <p>Score</p>
-                <p id="scoreParagraph">0</p>
-                <p>Level</p>
-                <p id="levelParagraph">1</p>
-                <p>Lines</p>
-                <p id="linesParagraph">0</p>
+            <div id="leftPanel">
+                <div id="scoreDiv">
+                    <p class="headerParagraph">Score</p>
+                    <p id="scoreParagraph"></p>
+
+                    <p class="headerParagraph">Level</p>
+                    <p id="levelParagraph"></p>
+
+                    <p class="headerParagraph">Lines</p>
+                    <p id="linesParagraph"></p>
+                </div>
             </div>
-            <div id="boardDiv">
-                    <canvas id = "boardCanvas" width="300" height="600">Your browser does not support the HTML5 canvas tag.</canvas>
+
+            <div id="centerPanel">
+                <canvas id = "boardCanvas" width="300" height="600">Your browser does not support the HTML5 canvas tag.</canvas>
             </div>
-            <div id="nextDiv">
-                <p>Next</p>
+
+            <div id="rightPanel">
+                <div id="nextPieceDiv">
+                    <p class="headerParagraph">Next</p>
+                    <canvas id = "nextPieceCanvas" width="120" height="120">Your browser does not support the HTML5 canvas tag.</canvas>
+                </div>
             </div>
-        </div>
         <script type = "module" src="matrix.js"></script>
         <script type = "module" src="board.js"></script>
         <script type = "module" src="piece.js"></script>

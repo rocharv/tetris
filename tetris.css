@@ -1,31 +1,37 @@
 body {
     margin: 0px;
     background-image:url("back.jpg");
-    background-size: 100%;
+    background-size: auto auto;
     color: white;
 }
 
-#boardDiv {
-    width: 30%;
-    float: left;
+
+.headerParagraph {
+    margin: 0;
+    text-align: center;
 }
+
 
 #boardCanvas {
-    padding: 0;
-    margin: 0;
-    display: block;
     background-color: #222222f0;
-    border: 1px solid #222222;
+    border-color: #222222;
     border-radius: 8px;
     box-shadow: 8px 8px 16px #222222;
-    padding: 10px;
+    display: block;
     margin: 0 auto;
+    padding: 8px;
+    width: 300px;
 }
 
-#header {
-    background-color: #035bbe;
-    height: 50px;
-    text-align: center;
+#centerPanel{
+    float: left;
+    margin: 0 auto;
+    width: 30%;
+}
+
+#leftPanel{
+    float: left;
+    width: 35%;
 }
 
 #main {
@@ -33,20 +39,35 @@ body {
 }
 
 
-#nextDiv {
-    background-color: #220000aa;
+#nextPieceDiv {
+    background-color: #222222f0;
+    border-color: #222222;
+    border-radius: 8px;
+    box-shadow: 8px 8px 16px #222222;
+    margin: 0 auto;
+    width: 240px;
+}
+
+#rightPanel{
     float: left;
     width: 35%;
 }
 
 #scoreDiv {
-    background-color: #000022aa;
-    float: left;
-    width: 35%;
+    background-color: #222222f0;
+    border-color: #222222;
+    border-radius: 8px;
+    box-shadow: 8px 8px 16px #222222;
+    margin: 0 auto;
+    width: 240px;
 }
 
 #scoreParagraph, #levelParagraph, #linesParagraph {
+    color: yellow;
     font-size: 32px;
+    margin-bottom: 16px;
+    margin-top: 0;
+    text-align: center;
 }
 
 #space {
