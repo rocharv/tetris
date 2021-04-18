@@ -109,7 +109,7 @@ export class Piece {
     isFree(pieceMatrix, x, y) {
         let free = true;
         for (let py = 0; py < this.pieceSize; py++) {
-            if (!free){
+            if (!free) {
                 break;
             }
             for (let px = 0; px < this.pieceSize; px++) {

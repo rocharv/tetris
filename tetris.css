@@ -5,7 +5,7 @@ body {
     color: white;
 }
 
-#board {
+#boardDiv {
     width: 30%;
     float: left;
 }
@@ -33,16 +33,20 @@ body {
 }
 
 
-#next {
+#nextDiv {
     background-color: #220000aa;
     float: left;
     width: 35%;
 }
 
-#score {
+#scoreDiv {
     background-color: #000022aa;
     float: left;
     width: 35%;
+}
+
+#scoreParagraph, #levelParagraph, #linesParagraph {
+    font-size: 32px;
 }
 
 #space {

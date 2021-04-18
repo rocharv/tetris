@@ -1,7 +1,6 @@
 'use strict';
 
 import { Matrix } from './matrix.js';
-import { Score } from './score.js';
 
 export class Board {
     constructor(context, rows, columns, score) {

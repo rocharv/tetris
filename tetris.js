@@ -43,7 +43,7 @@ function gameOver() {
 function init() {
 
     speed = new Speed();
-    score = new Score(speed);
+    score = new Score('scoreParagraph', 'levelParagraph', 'linesParagraph', speed);
 
 
     boardCanvas = document.getElementById('boardCanvas');

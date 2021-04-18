@@ -9,14 +9,19 @@
     <body>
         <div id="space"></div>
         <div id="main">
-            <div id="score">
-                <p>next</p>
-            </div>
-            <div id="board">
-                <canvas id = "boardCanvas" width="296" height="592">Your browser does not support the HTML5 canvas tag.</canvas>
-            </div>
-            <div id="next">
+            <div id="scoreDiv">
                 <p>Score</p>
+                <p id="scoreParagraph">0</p>
+                <p>Level</p>
+                <p id="levelParagraph">1</p>
+                <p>Lines</p>
+                <p id="linesParagraph">0</p>
+            </div>
+            <div id="boardDiv">
+                    <canvas id = "boardCanvas" width="300" height="600">Your browser does not support the HTML5 canvas tag.</canvas>
+            </div>
+            <div id="nextDiv">
+                <p>Next</p>
             </div>
         </div>
         <script type = "module" src="matrix.js"></script>

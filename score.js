@@ -1,15 +1,26 @@
 'use strict';
 
-import { Speed } from './speed.js';
-
 export class Score {
-    constructor(speed) {
+    constructor(scoreElementId, levelElementId, linesElementId, speed) {
+        this.levelElementId = levelElementId;
         this.lines = 0;
+        this.linesElementId = linesElementId;
         this.points = 0;
+        this.scoreElementId = scoreElementId;
         this.speed = speed;
+
+        this.updateHtmlElements();
     }
 
-    updateScore(linesAtOnce){
+    getLevel() {
+        return Math.trunc(this.lines / 10);
+    }
+
+    getPoints() {
+        return this.points;
+    }
+
+    updateScore(linesAtOnce) {
         this.lines += linesAtOnce;
         let level = this.getLevel();
 
@@ -17,13 +28,14 @@ export class Score {
         this.points += scorePerLinesAtOnce[linesAtOnce - 1] * (level + 1);
 
         this.speed.updateLevel(level);
+
+        this.updateHtmlElements();
     }
 
-    getPoints(){
-        return this.points;
-    }
+    updateHtmlElements() {
+        document.getElementById(this.scoreElementId).innerHTML = this.points;
+        document.getElementById(this.levelElementId).innerHTML = this.getLevel();
+        document.getElementById(this.linesElementId).innerHTML = this.lines;
 
-    getLevel() {
-        return Math.trunc(this.lines / 10);
     }
 }
