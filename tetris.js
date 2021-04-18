@@ -10,8 +10,13 @@ let board;
 let boardCanvas;
 let boardContext;
 let currentPiece;
+let isGameOver = false;
 let lastTime;
 let move;
+let nextPiece;
+let nextPieceBoard;
+let nextPieceBoardCanvas;
+let nextPieceBoardContext;
 let randomGenerator;
 let score;
 let speed;
@@ -36,6 +41,7 @@ function gameOver() {
     if (confirm("Game Over!\n\nDo you want to play again?")) {
         init();
     } else {
+        isGameOver = true;
         return;
     }
 }
@@ -45,17 +51,22 @@ function init() {
     speed = new Speed();
     score = new Score('scoreParagraph', 'levelParagraph', 'linesParagraph', speed);
 
-
     boardCanvas = document.getElementById('boardCanvas');
     boardContext = boardCanvas.getContext('2d');
     board = new Board(boardContext, 20, 10, score);
+
+    nextPieceBoardCanvas = document.getElementById('nextPieceBoardCanvas');
+    nextPieceBoardContext = nextPieceBoardCanvas.getContext('2d');
+    nextPieceBoard = new Board(nextPieceBoardContext, 4, 4, score);
+
+    nextPiece = new Piece(nextPieceBoard, 1, 0, 0, false);
 
     randomGenerator = new RandomGenerator(1, 7, 2);
 
 
     document.onkeydown = logKey;
 
-    nextPiece();
+    newPiece();
 
     lastTime = 0;
 
@@ -64,15 +75,17 @@ function init() {
 
 function logKey(k) {
     move = currentPiece.tryMove(k.code);
-    if (!move && k.code == 'ArrowDown' || k.code == 'Space') {
-        nextPiece();
+    if (!isGameOver &&
+        (!move && k.code == 'ArrowDown'
+        || k.code == 'Space')) {
+        newPiece();
     }
 }
 
-function nextPiece() {
+function newPiece() {
     board.clearCompleteRows();
 
-    currentPiece = new Piece(board, randomGenerator.getNextNumber());
+    currentPiece = new Piece(board, randomGenerator.getNextNumber(), 3, 0);
     if (!currentPiece.successfullyPlaced) {
         return false;
     }
@@ -86,8 +99,9 @@ function update(timeStamp) {
         move = currentPiece.tryMove('ArrowDown');
         lastTime = timeStamp;
         if (!move) {
-            return nextPiece();
+            return newPiece();
         }
     }
+
     return true;
 }

@@ -7,6 +7,8 @@ body {
 
 
 .headerParagraph {
+    background-color: #000000f0;
+    font-size: 24px;
     margin: 0;
     text-align: center;
 }
@@ -26,18 +28,28 @@ body {
 #centerPanel{
     float: left;
     margin: 0 auto;
-    width: 30%;
+    width: 34%;
 }
 
 #leftPanel{
     float: left;
-    width: 35%;
+    width: 33%;
 }
 
 #main {
     width: 100%;
 }
 
+#nextPieceBoardCanvas {
+    background-color: #222222f0;
+    border-color: #222222;
+    border-radius: 8px;
+    box-shadow: 8px 8px 16px #222222;
+    display: block;
+    margin: 0 auto;
+    padding: 8px;
+    width: 120px;
+}
 
 #nextPieceDiv {
     background-color: #222222f0;
@@ -50,7 +62,7 @@ body {
 
 #rightPanel{
     float: left;
-    width: 35%;
+    width: 33%;
 }
 
 #scoreDiv {
@@ -64,7 +76,7 @@ body {
 
 #scoreParagraph, #levelParagraph, #linesParagraph {
     color: yellow;
-    font-size: 32px;
+    font-size: 40px;
     margin-bottom: 16px;
     margin-top: 0;
     text-align: center;

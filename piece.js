@@ -3,31 +3,32 @@
 import { Matrix } from './matrix.js';
 
 export class Piece {
-    constructor(board, pieceId) {
+    constructor(board, pieceId, initialX, initialY, showShadow = true) {
         this.board = board;
         this.pieceId = pieceId;
         this.pieceShadowId = pieceId + 10;
         this.shadowY = 0;
+        this.showShadow = showShadow;
         this.successfullyPlaced = true;
-        this.x = 3;
-        this.y = 0;
+        this.x = initialX;
+        this.y = initialY;
 
         const pieceSet = [
             [
-                [0, 1, 0, 0],
-                [0, 1, 0, 0],
-                [0, 1, 0, 0],
-                [0, 1, 0, 0]
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [1, 1, 1, 1],
+                [0, 0, 0, 0]
             ],
             [
-                [0, 0, 2],
-                [0, 0, 2],
-                [0, 2, 2]
+                [0, 0, 0],
+                [2, 0, 0],
+                [2, 2, 2]
             ],
             [
-                [3, 0, 0],
-                [3, 0, 0],
-                [3, 3, 0]
+                [0, 0, 0],
+                [0, 0, 3],
+                [3, 3, 3]
             ],
             [
                 [0, 0, 0],
@@ -74,7 +75,6 @@ export class Piece {
         }
 
         this.addToBoardAndDraw(this.x, this.shadowY, this.pieceShadowId);
-        this.addToBoardAndDraw(this.x, this.y, this.pieceId);
     }
 
     addToBoardAndDraw(newX, newY, value) {
@@ -113,7 +113,8 @@ export class Piece {
                 break;
             }
             for (let px = 0; px < this.pieceSize; px++) {
-                if (pieceMatrix.getValue(px, py) != 0 &&
+                if (pieceMatrix.getValue(px, py) > 0 &&
+                    pieceMatrix.getValue(px, py) < 10 &&
                     (this.board.matrix.getValue(x + px, y + py) != 0 ||
                     x + px < 0 ||
                     y + py < 0 ||
@@ -151,7 +152,6 @@ export class Piece {
             case 'Space':
                 return this.drop();
             default:
-                this.addShadowToBoard();
                 return false;
         }
     }
