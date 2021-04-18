@@ -3,14 +3,16 @@
 import { Board } from './board.js';
 import { Piece } from './piece.js';
 import { RandomGenerator } from './random_generator.js';
+import { Score } from './score.js';
 
 let board;
-let canvas;
+let boardCanvas;
+let boardContext;
 let currentPiece;
-let context;
 let lastTime;
 let move;
 let randomGenerator;
+let score;
 
 window.onload = init;
 
@@ -37,11 +39,15 @@ function gameOver() {
 }
 
 function init() {
-    canvas = document.getElementById('canvas');
-    context = canvas.getContext('2d');
-    board = new Board(context, 20, 10);
+
+    score = new Score();
+
+    boardCanvas = document.getElementById('boardCanvas');
+    boardContext = boardCanvas.getContext('2d');
+    board = new Board(boardContext, 20, 10, score);
 
     randomGenerator = new RandomGenerator(1, 7, 2);
+
 
     document.onkeydown = logKey;
 

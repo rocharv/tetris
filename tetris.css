@@ -1,7 +1,25 @@
 body {
     margin: 0px;
-    background-color: black;
+    background-image:url("back.jpg");
+    background-size: 100%;
     color: white;
+}
+
+#board {
+    width: 30%;
+    float: left;
+}
+
+#boardCanvas {
+    padding: 0;
+    margin: 0;
+    display: block;
+    background-color: #222222f0;
+    border: 1px solid #222222;
+    border-radius: 8px;
+    box-shadow: 8px 8px 16px #222222;
+    padding: 10px;
+    margin: 0 auto;
 }
 
 #header {
@@ -10,17 +28,23 @@ body {
     text-align: center;
 }
 
-#space {
-    height: 50px;
+#main {
+    width: 100%;
 }
 
-#canvas {
-    padding: 0;
-    margin: 0;
-    display: block;
-    width: 300px;
-    height: 600px;
-    border: 1px solid whitesmoke;
-    padding: 10px;
-    margin: 0 auto;
+
+#next {
+    background-color: #220000aa;
+    float: left;
+    width: 35%;
+}
+
+#score {
+    background-color: #000022aa;
+    float: left;
+    width: 35%;
+}
+
+#space {
+    height: 50px;
 }

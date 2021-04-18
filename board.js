@@ -1,17 +1,22 @@
 'use strict';
 
 import { Matrix } from './matrix.js';
+import { Score } from './score.js';
 
 export class Board {
-    constructor(context, rows, columns) {
+    constructor(context, rows, columns, score) {
         this.context = context;
         this.matrix = new Matrix(rows, columns);
+        this.score = score;
     }
 
     clearCompleteRows() {
         let completeRows = this.getCompleteRows();
-        if (completeRows.length > 0) {
+
+        let linesAtOnce = completeRows.length;
+        if (linesAtOnce > 0) {
             this.compactRowsDown(completeRows);
+            this.score.updateScore(linesAtOnce);
         }
     }
 
