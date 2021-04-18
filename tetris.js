@@ -48,6 +48,7 @@ function gameOver() {
 
 function init() {
 
+    randomGenerator = new RandomGenerator(1, 7, 2);
     speed = new Speed();
     score = new Score('scoreParagraph', 'levelParagraph', 'linesParagraph', speed);
 
@@ -57,12 +58,6 @@ function init() {
 
     nextPieceBoardCanvas = document.getElementById('nextPieceBoardCanvas');
     nextPieceBoardContext = nextPieceBoardCanvas.getContext('2d');
-    nextPieceBoard = new Board(nextPieceBoardContext, 4, 4, score);
-
-    nextPiece = new Piece(nextPieceBoard, 1, 0, 0, false);
-
-    randomGenerator = new RandomGenerator(1, 7, 2);
-
 
     document.onkeydown = logKey;
 
@@ -89,6 +84,11 @@ function newPiece() {
     if (!currentPiece.successfullyPlaced) {
         return false;
     }
+
+    nextPieceBoard = new Board(nextPieceBoardContext, 9, 4, score);
+    new Piece(nextPieceBoard, randomGenerator.showNextNumbers(3)[0], 0, 0, false);
+    new Piece(nextPieceBoard, randomGenerator.showNextNumbers(3)[1], 0, 3, false);
+    new Piece(nextPieceBoard, randomGenerator.showNextNumbers(3)[2], 0, 6, false);
 
     return true;
 }

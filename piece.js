@@ -89,6 +89,7 @@ export class Piece {
                 }
             }
         }
+
         this.board.draw();
     }
 
@@ -113,8 +114,7 @@ export class Piece {
                 break;
             }
             for (let px = 0; px < this.pieceSize; px++) {
-                if (pieceMatrix.getValue(px, py) > 0 &&
-                    pieceMatrix.getValue(px, py) < 10 &&
+                if (pieceMatrix.getValue(px, py) != 0 &&
                     (this.board.matrix.getValue(x + px, y + py) != 0 ||
                     x + px < 0 ||
                     y + py < 0 ||
@@ -178,13 +178,13 @@ export class Piece {
                 }
 
         if (!this.isFree(tempMatrix, this.x, this.y)) {
-            this.addShadowToBoard();
+            this.showShadow ? this.addShadowToBoard() : null;
             this.addToBoardAndDraw(this.x, this.y, this.pieceId);
             return false;
         }
 
         this.matrix.setFromArray(tempMatrix.get());
-        this.addShadowToBoard();
+        this.showShadow ? this.addShadowToBoard() : null;
         this.addToBoardAndDraw(this.x, this.y, this.pieceId);
 
         return true;
@@ -192,7 +192,7 @@ export class Piece {
 
     tryTranslate(newX, newY) {
         if (!this.isFree(this.matrix, newX, newY)) {
-            this.addShadowToBoard();
+            this.showShadow ? this.addShadowToBoard() : null;
             this.addToBoardAndDraw(this.x, this.y, this.pieceId);
             return false;
         }
@@ -200,7 +200,7 @@ export class Piece {
         this.x = newX;
         this.y = newY;
 
-        this.addShadowToBoard();
+        this.showShadow ? this.addShadowToBoard() : null;
         this.addToBoardAndDraw(this.x, this.y, this.pieceId);
 
         return true;
